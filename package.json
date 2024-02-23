@@ -1,0 +1,7 @@
+{
+  "name": "@wcd/indiebeat.how-to-create-a-web-component-wc-tutorial-nhswd-fork-lsyr12e4",
+  "version": "0.0.0",
+  "scripts": {
+    "serve": "npx wcd-cli@latest serve O9nnn3pwLJd9IU3786bN --open"
+  }
+}
