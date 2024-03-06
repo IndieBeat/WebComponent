@@ -1,6 +1,6 @@
 import {use as $hC9IY$use, init as $hC9IY$init} from "echarts/core";
 import {LineChart as $hC9IY$LineChart} from "echarts/charts";
-import {TitleComponent as $hC9IY$TitleComponent, TooltipComponent as $hC9IY$TooltipComponent, GridComponent as $hC9IY$GridComponent} from "echarts/components";
+import {TitleComponent as $hC9IY$TitleComponent, TooltipComponent as $hC9IY$TooltipComponent, GridComponent as $hC9IY$GridComponent, ToolboxComponent as $hC9IY$ToolboxComponent, LegendComponent as $hC9IY$LegendComponent} from "echarts/components";
 import {LabelLayout as $hC9IY$LabelLayout, UniversalTransition as $hC9IY$UniversalTransition} from "echarts/features";
 import {CanvasRenderer as $hC9IY$CanvasRenderer} from "echarts/renderers";
 
@@ -17,12 +17,12 @@ $hC9IY$use([
     (0, $hC9IY$GridComponent),
     (0, $hC9IY$LabelLayout),
     (0, $hC9IY$UniversalTransition),
-    (0, $hC9IY$CanvasRenderer)
+    (0, $hC9IY$CanvasRenderer),
+    (0, $hC9IY$ToolboxComponent),
+    (0, $hC9IY$LegendComponent)
 ]);
-var $64e15ca0d1183459$export$2e2bcd8739ae039 = myechart = ()=>{
-    // Initialize the echarts instance based on the prepared dom
-    var myChart = $hC9IY$init(document.getElementById("chart"));
-    // Specify the configuration items and data for the chart
+var $64e15ca0d1183459$export$2e2bcd8739ae039 = myechart = (chart = document.getElementById("chart"))=>{
+    var myChart = $hC9IY$init(chart);
     option = {
         title: {
             text: "Stacked Line"
@@ -139,7 +139,6 @@ var $64e15ca0d1183459$export$2e2bcd8739ae039 = myechart = ()=>{
             }
         ]
     };
-    // Display the chart using the configuration items and data just specified.
     myChart.setOption(option);
 };
 

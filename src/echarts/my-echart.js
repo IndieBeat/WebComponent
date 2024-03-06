@@ -8,8 +8,8 @@ import {
 	TitleComponent,
 	TooltipComponent,
 	GridComponent,
-	DatasetComponent,
-	TransformComponent,
+	ToolboxComponent,
+	LegendComponent,
 } from 'echarts/components';
 import { LabelLayout, UniversalTransition } from 'echarts/features';
 import { CanvasRenderer } from 'echarts/renderers';
@@ -22,13 +22,13 @@ echarts.use([
 	LabelLayout,
 	UniversalTransition,
 	CanvasRenderer,
+	ToolboxComponent,
+	LegendComponent,
 ]);
 
-export default myechart = () => {
-	// Initialize the echarts instance based on the prepared dom
-	var myChart = echarts.init(document.getElementById('chart'));
+export default myechart = (chart = document.getElementById('chart')) => {
+	var myChart = echarts.init(chart);
 
-	// Specify the configuration items and data for the chart
 	option = {
 		title: {
 			text: 'Stacked Line',
@@ -92,6 +92,5 @@ export default myechart = () => {
 		],
 	};
 
-	// Display the chart using the configuration items and data just specified.
 	myChart.setOption(option);
 };

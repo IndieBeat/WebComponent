@@ -29,12 +29,12 @@ $hws2g$echartscore.use([
     (0, $hws2g$echartscomponents.GridComponent),
     (0, $hws2g$echartsfeatures.LabelLayout),
     (0, $hws2g$echartsfeatures.UniversalTransition),
-    (0, $hws2g$echartsrenderers.CanvasRenderer)
+    (0, $hws2g$echartsrenderers.CanvasRenderer),
+    (0, $hws2g$echartscomponents.ToolboxComponent),
+    (0, $hws2g$echartscomponents.LegendComponent)
 ]);
-var $f0c51d28f22abbfd$export$2e2bcd8739ae039 = myechart = ()=>{
-    // Initialize the echarts instance based on the prepared dom
-    var myChart = $hws2g$echartscore.init(document.getElementById("chart"));
-    // Specify the configuration items and data for the chart
+var $f0c51d28f22abbfd$export$2e2bcd8739ae039 = myechart = (chart = document.getElementById("chart"))=>{
+    var myChart = $hws2g$echartscore.init(chart);
     option = {
         title: {
             text: "Stacked Line"
@@ -151,7 +151,6 @@ var $f0c51d28f22abbfd$export$2e2bcd8739ae039 = myechart = ()=>{
             }
         ]
     };
-    // Display the chart using the configuration items and data just specified.
     myChart.setOption(option);
 };
 
