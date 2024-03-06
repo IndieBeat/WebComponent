@@ -1,7 +1,24 @@
 {
-  "name": "@wcd/indiebeat.how-to-create-a-web-component-wc-tutorial-nhswd-fork-lsyr12e4",
-  "version": "0.0.0",
-  "scripts": {
-    "serve": "npx wcd-cli@latest serve O9nnn3pwLJd9IU3786bN --open"
-  }
+	"name": "chart-tests",
+	"version": "0.0.0",
+	"license": "MIT",
+	"source": "src/echarts/my-echart.js",
+	"main": "dist/main.js",
+	"module": "dist/module.js",
+	"scripts": {
+		"dev": "parcel src/index.html",
+		"build": "parcel build src/echarts/my-echart.js",
+		"serve": "npx wcd-cli@latest serve O9nnn3pwLJd9IU3786bN --open"
+	},
+	"devDependencies": {
+		"buffer": "^6.0.3",
+		"parcel": "^2.12.0"
+	},
+	"dependencies": {
+		"@cubejs-client/core": "^0.31.0",
+		"chart.js": "^4.4.2",
+		"chartjs-chart-funnel": "^4.1.8",
+		"chartjs-plugin-datalabels": "^2.2.0",
+		"echarts": "^5.5.0"
+	}
 }
