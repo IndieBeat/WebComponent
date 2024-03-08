@@ -26,13 +26,21 @@ echarts.use([
 	LegendComponent,
 ]);
 
-export default myechart = (chart = document.getElementById('chart')) => {
-	var myChart = echarts.init(chart);
+export default myechart = (
+	div = document.getElementById('chart'),
+	titleText = 'My chart'
+) => {
+	let title = document.createElement('h1');
+	title.appendChild(document.createTextNode(titleText));
+	console.log(div);
+	console.log(title);
+	div.appendChild(title);
+	let chart = document.createElement('div');
+	chart.setAttribute('style', 'width: 40%; height: 300%');
+	div.appendChild(chart);
+	let myChart = echarts.init(chart);
 
 	option = {
-		title: {
-			text: 'Stacked Line',
-		},
 		tooltip: {
 			trigger: 'axis',
 		},

@@ -17,5 +17,8 @@
 	"dependencies": {
 		"@cubejs-client/core": "^0.31.0",
 		"echarts": "^5.5.0"
+	},
+	"publishConfig": {
+		"registry": "http://localhost:80"
 	}
 }
