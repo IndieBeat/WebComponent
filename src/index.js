@@ -1,5 +1,5 @@
-import myechart from './echarts/my-echart.js';
+import { myLineechart } from './echarts/my-echart.js';
 
 window.addEventListener('load', () => {
-	myechart();
+	myLineechart();
 });

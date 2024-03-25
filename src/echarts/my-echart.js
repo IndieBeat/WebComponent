@@ -26,7 +26,7 @@ echarts.use([
 	LegendComponent,
 ]);
 
-export default myechart = (
+export const myLineechart = (
 	div = document.getElementById('chart'),
 	titleText = 'My chart'
 ) => {
@@ -38,9 +38,9 @@ export default myechart = (
 	let chart = document.createElement('div');
 	chart.setAttribute('style', 'width: 40%; height: 300%');
 	div.appendChild(chart);
-	let myChart = echarts.init(chart);
+	let myChart = echarts.init(chart, 'dark');
 
-	option = {
+	const option = {
 		tooltip: {
 			trigger: 'axis',
 		},
@@ -101,4 +101,8 @@ export default myechart = (
 	};
 
 	myChart.setOption(option);
+
+	window.addEventListener('resize', () => {
+		myChart.resize();
+	});
 };
