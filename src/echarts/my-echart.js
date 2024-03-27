@@ -36,7 +36,8 @@ export const myLineechart = (
 	console.log(title);
 	div.appendChild(title);
 	let chart = document.createElement('div');
-	chart.setAttribute('style', 'width: 40%; height: 300%');
+	chart.setAttribute('style', 'width: 100%; height: 500%');
+	chart.id = 'content';
 	div.appendChild(chart);
 	let myChart = echarts.init(chart, 'dark');
 
