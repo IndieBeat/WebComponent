@@ -2,7 +2,7 @@
 
 import * as echarts from 'echarts/core';
 
-import { LineChart } from 'echarts/charts';
+import { LineChart, PieChart } from 'echarts/charts';
 
 import {
 	TitleComponent,
@@ -16,6 +16,7 @@ import { CanvasRenderer } from 'echarts/renderers';
 
 echarts.use([
 	LineChart,
+	PieChart,
 	TitleComponent,
 	TooltipComponent,
 	GridComponent,
@@ -28,13 +29,9 @@ echarts.use([
 
 export const myLineechart = (
 	div = document.getElementById('chart'),
-	titleText = 'My chart'
+	titleText = 'My chart',
+	type = 'line'
 ) => {
-	let title = document.createElement('h1');
-	title.appendChild(document.createTextNode(titleText));
-	console.log(div);
-	console.log(title);
-	div.appendChild(title);
 	let chart = document.createElement('div');
 	chart.setAttribute('style', 'width: 100%; height: 500%');
 	chart.id = 'content';
@@ -42,32 +39,53 @@ export const myLineechart = (
 	let myChart = echarts.init(chart, 'dark');
 
 	const option = {
-		tooltip: {
-			trigger: 'axis',
-		},
-		legend: {
-			data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine'],
-		},
-		grid: {
-			left: '3%',
-			right: '4%',
-			bottom: '3%',
-			containLabel: true,
+		title: {
+			text: titleText,
 		},
 		toolbox: {
 			feature: {
 				saveAsImage: {},
 			},
 		},
-		xAxis: {
+	};
+
+	if (type == 'pie') {
+		option['title']['left'] = 'center';
+		option['tooltip'] = { tooltip: 'item' };
+		option['legend'] = { orient: 'vertical', left: 'left' };
+		option['series'] = [
+			{
+				name: 'Access From',
+				type: 'pie',
+				radius: '50%',
+				data: [
+					{ value: 1048, name: 'Search Engine' },
+					{ value: 735, name: 'Direct' },
+					{ value: 580, name: 'Email' },
+					{ value: 484, name: 'Union Ads' },
+					{ value: 300, name: 'Video Ads' },
+				],
+				emphasis: {
+					itemStyle: {
+						shadowBlur: 10,
+						shadowOffsetX: 0,
+						shadowColor: 'rgba(0, 0, 0, 0.5)',
+					},
+				},
+			},
+		];
+	} else if (type == 'line') {
+		option['tooltip'] = { trigger: 'axis' };
+		option['legend'] = {
+			data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine'],
+		};
+		option['xAxis'] = {
 			type: 'category',
 			boundaryGap: false,
 			data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-		},
-		yAxis: {
-			type: 'value',
-		},
-		series: [
+		};
+		option['yAxis'] = { type: 'value' };
+		option['series'] = [
 			{
 				name: 'Email',
 				type: 'line',
@@ -98,8 +116,8 @@ export const myLineechart = (
 				stack: 'Total',
 				data: [820, 932, 901, 934, 1290, 1330, 1320],
 			},
-		],
-	};
+		];
+	}
 
 	myChart.setOption(option);
 

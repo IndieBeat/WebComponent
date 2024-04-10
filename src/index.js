@@ -1,5 +1,5 @@
 import { myLineechart } from './echarts/my-echart.js';
 
 window.addEventListener('load', () => {
-	myLineechart();
+	myLineechart(document.getElementById('chart'), 'Such a cool text wow', 'pie');
 });
