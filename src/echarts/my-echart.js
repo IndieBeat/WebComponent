@@ -123,5 +123,12 @@ export const myLineechart = (
 
 	window.addEventListener('resize', () => {
 		myChart.resize();
+		if (myChart.getWidth() < 850) {
+			option['legend']['top'] = 30;
+			myChart.setOption(option);
+		} else {
+			option['legend']['top'] = 0;
+			myChart.setOption(option);
+		}
 	});
 };
