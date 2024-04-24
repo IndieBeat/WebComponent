@@ -150,6 +150,7 @@ const graficoTiempo = (titleText, myChart) => {
 		title: {
 			text: titleText,
 		},
+		legend: {},
 		transition: ['style', 'x', 'y'],
 		tooltip: {
 			trigger: 'axis',
