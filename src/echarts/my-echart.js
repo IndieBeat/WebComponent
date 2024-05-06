@@ -198,10 +198,8 @@ export const myLineechart = (
 	titleText = 'My chart',
 	type = 'line'
 ) => {
-	let chart = document.createElement('div');
-	chart.setAttribute('style', 'width: 100%; height: 500%');
+	chart.setAttribute('style', 'width: 100%; height: 100%');
 	chart.id = 'content';
-	div.appendChild(chart);
 	let myChart = echarts.init(chart, 'dark');
 
 	let option;
