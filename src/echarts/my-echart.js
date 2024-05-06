@@ -198,9 +198,7 @@ export const myLineechart = (
 	titleText = 'My chart',
 	type = 'line'
 ) => {
-	chart.setAttribute('style', 'width: 100%; height: 100%');
-	chart.id = 'content';
-	let myChart = echarts.init(chart, 'dark');
+	let myChart = echarts.init(div, 'dark');
 
 	let option;
 	if (type == 'pie') {
