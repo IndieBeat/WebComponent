@@ -27,15 +27,18 @@ echarts.use([
 	LegendComponent,
 ]);
 
-const fakeData = (quant, max, min = 1) => {
+export const fakeData = (nseries, nvalues, max, min = 1) => {
 	let dataValue = [];
-	for (let i = 0; i < quant; i++) {
-		dataValue.push(Math.round(Math.random() * (max - min + 1) + min));
+	for (let i = 0; i < nseries; i++) {
+		dataValue.push([]);
+		for (let j = 0; j < nvalues; j++) {
+			dataValue[i].push(Math.round(Math.random() * (max - min + 1) + min));
+		}
 	}
 	return dataValue;
 };
 
-const graficoLinea = (titleText) => {
+const graficoLinea = (titleText, data) => {
 	let option = {
 		title: {
 			text: titleText,
@@ -61,39 +64,39 @@ const graficoLinea = (titleText) => {
 			name: 'Email',
 			type: 'line',
 			stack: 'Total',
-			data: fakeData(7, 500, 50),
+			data: data[0],
 		},
 		{
 			name: 'Union Ads',
 			type: 'line',
 			stack: 'Total',
-			data: fakeData(7, 500, 50),
+			data: data[1],
 		},
 		{
 			name: 'Video Ads',
 			type: 'line',
 			stack: 'Total',
-			data: fakeData(7, 500, 50),
+			data: data[2],
 		},
 		{
 			name: 'Direct',
 			type: 'line',
 			stack: 'Total',
-			data: fakeData(7, 500, 50),
+			data: data[3],
 		},
 		{
 			name: 'Search Engine',
 			type: 'line',
 			stack: 'Total',
-			data: fakeData(7, 500, 50),
+			data: data[4],
 		},
 	];
 	return option;
 };
 
-const graficoTarta = (titleText) => {
-	let dataValue = fakeData(5, 1000, 100);
-	dataValue.sort((a, b) => {
+const graficoTarta = (titleText, data) => {
+	console.log(data);
+	data.sort((a, b) => {
 		return a - b;
 	});
 	let option = {
@@ -115,11 +118,11 @@ const graficoTarta = (titleText) => {
 			type: 'pie',
 			radius: '50%',
 			data: [
-				{ value: dataValue[0], name: 'Search Engine' },
-				{ value: dataValue[1], name: 'Direct' },
-				{ value: dataValue[2], name: 'Email' },
-				{ value: dataValue[3], name: 'Union Ads' },
-				{ value: dataValue[4], name: 'Video Ads' },
+				{ value: data[0], name: 'Search Engine' },
+				{ value: data[1], name: 'Direct' },
+				{ value: data[2], name: 'Email' },
+				{ value: data[3], name: 'Union Ads' },
+				{ value: data[4], name: 'Video Ads' },
 			],
 			emphasis: {
 				itemStyle: {
@@ -193,18 +196,19 @@ const graficoTiempo = (titleText, myChart) => {
 	return option;
 };
 
-export const myLineechart = (
+export const myEChart = (
 	div = document.getElementById('chart'),
 	titleText = 'My chart',
-	type = 'line'
+	type = 'line',
+	myData
 ) => {
 	let myChart = echarts.init(div, 'dark');
 
 	let option;
 	if (type == 'pie') {
-		option = graficoTarta(titleText);
+		option = graficoTarta(titleText, myData);
 	} else if (type == 'line') {
-		option = graficoLinea(titleText);
+		option = graficoLinea(titleText, myData);
 	} else if (type == 'timed') {
 		option = graficoTiempo(titleText, myChart);
 	}
