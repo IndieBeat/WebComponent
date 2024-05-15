@@ -200,34 +200,41 @@ export const myEChart = (
 	div = document.getElementById('chart'),
 	titleText = 'My chart',
 	type = 'line',
-	myData
+	myDataFile
 ) => {
 	let myChart = echarts.init(div, 'dark');
 
 	let option;
-	if (type == 'pie') {
-		option = graficoTarta(titleText, myData);
-	} else if (type == 'line') {
-		option = graficoLinea(titleText, myData);
-	} else if (type == 'timed') {
-		option = graficoTiempo(titleText, myChart);
-	}
+	fetch(myDataFile)
+		.then((res) => res.json())
+		.then((data) => {
+			let myData = data;
 
-	if (type == 'line') {
-		window.addEventListener('resize', () => {
-			if (myChart.getWidth() < 850) {
-				option['legend']['top'] = 30;
-				myChart.setOption(option);
-			} else {
-				option['legend']['top'] = 0;
-				myChart.setOption(option);
+			console.log(myData);
+			if (type == 'pie') {
+				option = graficoTarta(titleText, myData);
+			} else if (type == 'line') {
+				option = graficoLinea(titleText, myData);
+			} else if (type == 'timed') {
+				option = graficoTiempo(titleText, myChart);
 			}
-			myChart.resize();
+
+			if (type == 'line') {
+				window.addEventListener('resize', () => {
+					if (myChart.getWidth() < 850) {
+						option['legend']['top'] = 30;
+						myChart.setOption(option);
+					} else {
+						option['legend']['top'] = 0;
+						myChart.setOption(option);
+					}
+					myChart.resize();
+				});
+			} else {
+				window.addEventListener('resize', () => {
+					myChart.resize();
+				});
+			}
+			myChart.setOption(option);
 		});
-	} else {
-		window.addEventListener('resize', () => {
-			myChart.resize();
-		});
-	}
-	myChart.setOption(option);
 };
