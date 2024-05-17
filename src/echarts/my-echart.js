@@ -38,7 +38,7 @@ export const fakeData = (nseries, nvalues, max, min = 1) => {
 	return dataValue;
 };
 
-const graficoLinea = (titleText, data) => {
+const graficoLinea = (titleText, myChart, myDataSource) => {
 	let option = {
 		title: {
 			text: titleText,
@@ -48,193 +48,195 @@ const graficoLinea = (titleText, data) => {
 				saveAsImage: {},
 			},
 		},
-	};
-	option['tooltip'] = { trigger: 'axis' };
-	option['legend'] = {
-		data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine'],
-	};
-	option['xAxis'] = {
-		type: 'category',
-		boundaryGap: false,
-		data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-	};
-	option['yAxis'] = { type: 'value' };
-	option['series'] = [
-		{
-			name: 'Email',
-			type: 'line',
-			stack: 'Total',
-			data: data[0],
-		},
-		{
-			name: 'Union Ads',
-			type: 'line',
-			stack: 'Total',
-			data: data[1],
-		},
-		{
-			name: 'Video Ads',
-			type: 'line',
-			stack: 'Total',
-			data: data[2],
-		},
-		{
-			name: 'Direct',
-			type: 'line',
-			stack: 'Total',
-			data: data[3],
-		},
-		{
-			name: 'Search Engine',
-			type: 'line',
-			stack: 'Total',
-			data: data[4],
-		},
-	];
-	return option;
-};
-
-const graficoTarta = (titleText, data) => {
-	console.log(data);
-	data.sort((a, b) => {
-		return a - b;
-	});
-	let option = {
-		title: {
-			text: titleText,
-		},
-		toolbox: {
-			feature: {
-				saveAsImage: {},
-			},
-		},
-	};
-	option['title']['left'] = 'center';
-	option['tooltip'] = { tooltip: 'item' };
-	option['legend'] = { orient: 'vertical', left: 'left' };
-	option['series'] = [
-		{
-			name: 'Access From',
-			type: 'pie',
-			radius: '50%',
-			data: [
-				{ value: data[0], name: 'Search Engine' },
-				{ value: data[1], name: 'Direct' },
-				{ value: data[2], name: 'Email' },
-				{ value: data[3], name: 'Union Ads' },
-				{ value: data[4], name: 'Video Ads' },
-			],
-			emphasis: {
-				itemStyle: {
-					shadowBlur: 10,
-					shadowOffsetX: 0,
-					shadowColor: 'rgba(0, 0, 0, 0.5)',
-				},
-			},
-		},
-	];
-	return option;
-};
-
-const graficoTiempo = (titleText, myChart) => {
-	function randomData() {
-		now = new Date(+now + oneDay);
-		value = value + Math.random() * 20 - 10;
-		return [now, Math.round(value)];
-	}
-	let data = [];
-	let now = new Date(2014, 9, 3);
-	let oneDay = 5 * 60 * 1000;
-	let value = Math.random() * 1000;
-	for (var i = 0; i < 1000; i++) {
-		data.push(randomData());
-	}
-	option = {
-		title: {
-			text: titleText,
-		},
-		legend: {},
-		transition: ['style', 'x', 'y'],
-		tooltip: {
-			trigger: 'axis',
-			axisPointer: {
-				animation: false,
-			},
+		tooltip: { trigger: 'axis' },
+		legend: {
+			data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine'],
 		},
 		xAxis: {
-			type: 'time',
-			splitLine: {
-				show: false,
-			},
+			type: 'category',
+			boundaryGap: false,
+			data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
 		},
-		yAxis: {
-			type: 'value',
-			boundaryGap: [0, '100%'],
-		},
-		series: [
-			{
-				name: 'Fake Data',
-				type: 'line',
-				showSymbol: false,
-				data: data,
-			},
-		],
+		yAxis: { type: 'value' },
 	};
-	setInterval(function () {
-		for (var i = 0; i < 1; i++) {
-			data.shift();
-			data.push(randomData());
-		}
-		myChart.setOption({
-			series: [
+
+	fetch(myDataSource)
+		.then((res) => res.json())
+		.then((data) => {
+			option['series'] = [
 				{
-					data: data,
+					name: 'Email',
+					type: 'line',
+					stack: 'Total',
+					data: data[0],
 				},
-			],
+				{
+					name: 'Union Ads',
+					type: 'line',
+					stack: 'Total',
+					data: data[1],
+				},
+				{
+					name: 'Video Ads',
+					type: 'line',
+					stack: 'Total',
+					data: data[2],
+				},
+				{
+					name: 'Direct',
+					type: 'line',
+					stack: 'Total',
+					data: data[3],
+				},
+				{
+					name: 'Search Engine',
+					type: 'line',
+					stack: 'Total',
+					data: data[4],
+				},
+			];
+			window.addEventListener('resize', () => {
+				if (myChart.getWidth() < 850) {
+					option['legend']['top'] = 30;
+					myChart.setOption(option);
+				} else {
+					option['legend']['top'] = 0;
+					myChart.setOption(option);
+				}
+				myChart.resize();
+			});
+			myChart.setOption(option);
 		});
-	}, 150);
-	return option;
+};
+
+const graficoTarta = (titleText, myChart, myDataFile) => {
+	let option = {
+		title: {
+			text: titleText,
+		},
+		toolbox: {
+			feature: {
+				saveAsImage: {},
+			},
+		},
+		title: {
+			left: 'center',
+		},
+		tooltip: { tooltip: 'item' },
+		legend: { orient: 'vertical', left: 'left' },
+	};
+	fetch(myDataFile)
+		.then((res) => res.json())
+		.then((data) => {
+			data.sort((a, b) => {
+				return a - b;
+			});
+			option['series'] = [
+				{
+					name: 'Access From',
+					type: 'pie',
+					radius: '50%',
+					data: [
+						{ value: data[0], name: 'Search Engine' },
+						{ value: data[1], name: 'Direct' },
+						{ value: data[2], name: 'Email' },
+						{ value: data[3], name: 'Union Ads' },
+						{ value: data[4], name: 'Video Ads' },
+					],
+					emphasis: {
+						itemStyle: {
+							shadowBlur: 10,
+							shadowOffsetX: 0,
+							shadowColor: 'rgba(0, 0, 0, 0.5)',
+						},
+					},
+				},
+			];
+			window.addEventListener('resize', () => {
+				myChart.resize();
+			});
+			myChart.setOption(option);
+		});
+};
+
+const graficoTiempo = (titleText, myChart, myDataSource) => {
+	fetch(myDataSource)
+		.then((r) => r.json())
+		.then((data) => {
+			option = {
+				title: {
+					text: titleText,
+				},
+				legend: {},
+				transition: ['style', 'x', 'y'],
+				tooltip: {
+					trigger: 'axis',
+					axisPointer: {
+						animation: false,
+					},
+				},
+				xAxis: {
+					type: 'time',
+					splitLine: {
+						show: false,
+					},
+				},
+				yAxis: {
+					type: 'value',
+					boundaryGap: [0, '100%'],
+				},
+				series: [
+					{
+						name: 'Fake Data',
+						type: 'line',
+						showSymbol: false,
+						data: data,
+					},
+				],
+			};
+			myChart.setOption(option);
+			setInterval(function () {
+				fetch(myDataSource, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify(myChart.getOption().series[0].data),
+				})
+					.then((r) => r.json())
+					.then((dataAdded) => {
+						myChart.setOption({
+							series: [
+								{
+									data: dataAdded,
+								},
+							],
+						});
+					});
+			}, 150);
+			window.addEventListener('resize', () => {
+				myChart.resize();
+			});
+		});
 };
 
 export const myEChart = (
 	div = document.getElementById('chart'),
 	titleText = 'My chart',
 	type = 'line',
-	myDataFile
+	myDataSource
 ) => {
 	let myChart = echarts.init(div, 'dark');
 
-	let option;
-	fetch(myDataFile)
-		.then((res) => res.json())
-		.then((data) => {
-			let myData = data;
-
-			console.log(myData);
-			if (type == 'pie') {
-				option = graficoTarta(titleText, myData);
-			} else if (type == 'line') {
-				option = graficoLinea(titleText, myData);
-			} else if (type == 'timed') {
-				option = graficoTiempo(titleText, myChart);
-			}
-
-			if (type == 'line') {
-				window.addEventListener('resize', () => {
-					if (myChart.getWidth() < 850) {
-						option['legend']['top'] = 30;
-						myChart.setOption(option);
-					} else {
-						option['legend']['top'] = 0;
-						myChart.setOption(option);
-					}
-					myChart.resize();
-				});
-			} else {
-				window.addEventListener('resize', () => {
-					myChart.resize();
-				});
-			}
-			myChart.setOption(option);
-		});
+	if (type == 'timed') {
+		graficoTiempo(titleText, myChart, myDataSource);
+	} else {
+		if (type == 'line') {
+			graficoLinea(titleText, myChart, myDataSource).then((option) =>
+				myChart.setOption(option)
+			);
+		} else if (type == 'pie') {
+			graficoTarta(titleText, myChart, myDataSource).then((option) =>
+				myChart.setOption(option)
+			);
+		}
+	}
 };
