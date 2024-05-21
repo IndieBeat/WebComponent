@@ -1,6 +1,6 @@
 {
 	"name": "my-echart",
-	"version": "0.0.20",
+	"version": "0.0.21",
 	"license": "MIT",
 	"source": "src/echarts/my-echart.js",
 	"main": "dist/main.js",
