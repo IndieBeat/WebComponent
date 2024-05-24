@@ -226,17 +226,13 @@ export const myEChart = (
 ) => {
 	let myChart = echarts.init(div, 'dark');
 
-	if (type == 'timed') {
+	if (type == 'time') {
 		graficoTiempo(titleText, myChart, myDataSource);
 	} else {
 		if (type == 'line') {
-			graficoLinea(titleText, myChart, myDataSource).then((option) =>
-				myChart.setOption(option)
-			);
+			graficoLinea(titleText, myChart, myDataSource);
 		} else if (type == 'pie') {
-			graficoTarta(titleText, myChart, myDataSource).then((option) =>
-				myChart.setOption(option)
-			);
+			graficoTarta(titleText, myChart, myDataSource);
 		}
 	}
 };
