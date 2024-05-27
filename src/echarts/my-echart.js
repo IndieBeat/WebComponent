@@ -38,6 +38,8 @@ export const fakeData = (nseries, nvalues, max, min = 1) => {
 	return dataValue;
 };
 
+let timeInterval;
+
 const graficoLinea = (titleText, myChart, myDataSource) => {
 	let option = {
 		title: {
@@ -98,14 +100,14 @@ const graficoLinea = (titleText, myChart, myDataSource) => {
 			window.addEventListener('resize', () => {
 				if (myChart.getWidth() < 850) {
 					option['legend']['top'] = 30;
-					myChart.setOption(option);
+					myChart.setOption(option, true);
 				} else {
 					option['legend']['top'] = 0;
-					myChart.setOption(option);
+					myChart.setOption(option, true);
 				}
 				myChart.resize();
 			});
-			myChart.setOption(option);
+			myChart.setOption(option, true);
 		});
 };
 
@@ -155,7 +157,7 @@ const graficoTarta = (titleText, myChart, myDataFile) => {
 			window.addEventListener('resize', () => {
 				myChart.resize();
 			});
-			myChart.setOption(option);
+			myChart.setOption(option, true);
 		});
 };
 
@@ -194,8 +196,8 @@ const graficoTiempo = (titleText, myChart, myDataSource) => {
 					},
 				],
 			};
-			myChart.setOption(option);
-			setInterval(function () {
+			myChart.setOption(option, true);
+			timeInterval = setInterval(function () {
 				fetch(myDataSource, {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
@@ -225,6 +227,8 @@ export const myEChart = (
 	myDataSource
 ) => {
 	let myChart = echarts.init(div, 'dark');
+	clearInterval(timeInterval);
+	timeInterval = null;
 
 	if (type == 'time') {
 		graficoTiempo(titleText, myChart, myDataSource);

@@ -11,6 +11,19 @@ window.addEventListener('load', () => {
 		document.getElementById('chart'),
 		'Such a cool text wow',
 		'pie',
-		pieDataLink
+		lineDataLink
 	);
+
+	document.getElementById('btline').addEventListener('click', () => {
+		let grafico = document.getElementById('chart');
+		myEChart(grafico, '', 'line', lineDataLink);
+	});
+	document.getElementById('btpie').addEventListener('click', () => {
+		let grafico = document.getElementById('chart');
+		myEChart(grafico, '', 'pie', pieDataLink);
+	});
+	document.getElementById('bttime').addEventListener('click', () => {
+		let grafico = document.getElementById('chart');
+		myEChart(grafico, '', 'time', timeDataLink);
+	});
 });
