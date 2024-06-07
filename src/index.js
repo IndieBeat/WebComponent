@@ -1,29 +1,43 @@
-import { myEChart } from './echarts/my-echart.js';
+import {
+	graficoTiempo,
+	graficoTiempoLines,
+	graficoLinea,
+	graficoTarta,
+} from './echarts/my-echart.js';
 
 window.addEventListener('load', () => {
-	let pieDataLink = new URL('http://localhost:3000/pieData/5', import.meta.url);
-	let lineDataLink = new URL(
-		'http://localhost:3000/lineData/5/7',
-		import.meta.url
-	);
+	let pieSeries = ['Iker', 'Galan', 'Olax'];
+	let pieDataLink = new URL('http://localhost:3000/pieData', import.meta.url);
+	let lineSeries = ['Iker', 'Galan', 'Olax', 'Illan', 'Jaraca'];
+	let lineCategory = [
+		'Jan',
+		'Feb',
+		'Mar',
+		'Apr',
+		'May',
+		'Jun',
+		'Jul',
+		'Aug',
+		'Sep',
+		'Oct',
+		'Nov',
+		'Dec',
+	];
+	let lineDataLink = new URL('http://localhost:3000/lineData', import.meta.url);
 	let timeDataLink = new URL('http://localhost:3000/timeData');
-	myEChart(
-		document.getElementById('chart'),
-		'Such a cool text wow',
-		'pie',
-		lineDataLink
-	);
+	let gf = document.getElementById('chart');
+	graficoLinea(gf, lineSeries, lineCategory, lineDataLink);
 
 	document.getElementById('btline').addEventListener('click', () => {
 		let grafico = document.getElementById('chart');
-		myEChart(grafico, '', 'line', lineDataLink);
+		graficoLinea(grafico, lineSeries, lineCategory, lineDataLink);
 	});
 	document.getElementById('btpie').addEventListener('click', () => {
 		let grafico = document.getElementById('chart');
-		myEChart(grafico, '', 'pie', pieDataLink);
+		graficoTarta(grafico, pieSeries, pieDataLink);
 	});
 	document.getElementById('bttime').addEventListener('click', () => {
 		let grafico = document.getElementById('chart');
-		myEChart(grafico, '', 'time', timeDataLink);
+		graficoTiempoLines(grafico, lineSeries, timeDataLink);
 	});
 });

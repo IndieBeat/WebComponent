@@ -5,7 +5,6 @@ import * as echarts from 'echarts/core';
 import { LineChart, PieChart } from 'echarts/charts';
 
 import {
-	TitleComponent,
 	TooltipComponent,
 	GridComponent,
 	ToolboxComponent,
@@ -17,7 +16,6 @@ import { SVGRenderer } from 'echarts/renderers';
 echarts.use([
 	LineChart,
 	PieChart,
-	TitleComponent,
 	TooltipComponent,
 	GridComponent,
 	LabelLayout,
@@ -40,11 +38,12 @@ export const fakeData = (nseries, nvalues, max, min = 1) => {
 
 let timeInterval;
 
-const graficoLinea = (titleText, myChart, myDataSource) => {
+export const graficoLinea = (div, series, category, myDataSource) => {
+	let myChart = echarts.init(div, 'dark');
+	clearInterval(timeInterval);
+	timeInterval = null;
+
 	let option = {
-		title: {
-			text: titleText,
-		},
 		toolbox: {
 			feature: {
 				saveAsImage: {},
@@ -52,51 +51,29 @@ const graficoLinea = (titleText, myChart, myDataSource) => {
 		},
 		tooltip: { trigger: 'axis' },
 		legend: {
-			data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine'],
+			data: series,
 		},
 		xAxis: {
 			type: 'category',
 			boundaryGap: false,
-			data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+			data: category,
 		},
 		yAxis: { type: 'value' },
 	};
 
-	fetch(myDataSource)
+	let url = myDataSource + '/' + series.length + '/' + category.length;
+	fetch(url)
 		.then((res) => res.json())
 		.then((data) => {
-			option['series'] = [
-				{
-					name: 'Email',
+			option['series'] = [];
+			for (let [i, d] of data.entries()) {
+				option['series'].push({
+					name: series[i],
 					type: 'line',
 					stack: 'Total',
-					data: data[0],
-				},
-				{
-					name: 'Union Ads',
-					type: 'line',
-					stack: 'Total',
-					data: data[1],
-				},
-				{
-					name: 'Video Ads',
-					type: 'line',
-					stack: 'Total',
-					data: data[2],
-				},
-				{
-					name: 'Direct',
-					type: 'line',
-					stack: 'Total',
-					data: data[3],
-				},
-				{
-					name: 'Search Engine',
-					type: 'line',
-					stack: 'Total',
-					data: data[4],
-				},
-			];
+					data: d,
+				});
+			}
 			window.addEventListener('resize', () => {
 				if (myChart.getWidth() < 850) {
 					option['legend']['top'] = 30;
@@ -111,40 +88,30 @@ const graficoLinea = (titleText, myChart, myDataSource) => {
 		});
 };
 
-const graficoTarta = (titleText, myChart, myDataFile) => {
+export const graficoTarta = (div, series, myDataSource) => {
+	let myChart = echarts.init(div, 'dark');
+	clearInterval(timeInterval);
+	timeInterval = null;
+
 	let option = {
-		title: {
-			text: titleText,
-		},
 		toolbox: {
 			feature: {
 				saveAsImage: {},
 			},
 		},
-		title: {
-			left: 'center',
-		},
 		tooltip: { tooltip: 'item' },
 		legend: { orient: 'vertical', left: 'left' },
 	};
-	fetch(myDataFile)
+
+	let url = myDataSource + '/' + series.length;
+	fetch(url)
 		.then((res) => res.json())
 		.then((data) => {
-			data.sort((a, b) => {
-				return a - b;
-			});
 			option['series'] = [
 				{
-					name: 'Access From',
 					type: 'pie',
 					radius: '50%',
-					data: [
-						{ value: data[0], name: 'Search Engine' },
-						{ value: data[1], name: 'Direct' },
-						{ value: data[2], name: 'Email' },
-						{ value: data[3], name: 'Union Ads' },
-						{ value: data[4], name: 'Video Ads' },
-					],
+					data: [],
 					emphasis: {
 						itemStyle: {
 							shadowBlur: 10,
@@ -154,6 +121,15 @@ const graficoTarta = (titleText, myChart, myDataFile) => {
 					},
 				},
 			];
+
+			for (const [i, d] of data.entries()) {
+				option['series'][0].data.push({ value: d, name: series[i] });
+			}
+
+			option['series'][0].data.sort(
+				(a, b) => parseFloat(a.value) - parseFloat(b.value)
+			);
+
 			window.addEventListener('resize', () => {
 				myChart.resize();
 			});
@@ -161,14 +137,15 @@ const graficoTarta = (titleText, myChart, myDataFile) => {
 		});
 };
 
-const graficoTiempo = (titleText, myChart, myDataSource) => {
+export const graficoTiempo = (div, myDataSource) => {
+	let myChart = echarts.init(div, 'dark');
+	clearInterval(timeInterval);
+	timeInterval = null;
+
 	fetch(myDataSource)
 		.then((r) => r.json())
 		.then((data) => {
 			option = {
-				title: {
-					text: titleText,
-				},
 				legend: {},
 				transition: ['style', 'x', 'y'],
 				tooltip: {
@@ -220,23 +197,71 @@ const graficoTiempo = (titleText, myChart, myDataSource) => {
 		});
 };
 
-export const myEChart = (
-	div = document.getElementById('chart'),
-	titleText = 'My chart',
-	type = 'line',
-	myDataSource
-) => {
+export const graficoTiempoLines = (div, series, myDataSource) => {
 	let myChart = echarts.init(div, 'dark');
 	clearInterval(timeInterval);
 	timeInterval = null;
 
-	if (type == 'time') {
-		graficoTiempo(titleText, myChart, myDataSource);
-	} else {
-		if (type == 'line') {
-			graficoLinea(titleText, myChart, myDataSource);
-		} else if (type == 'pie') {
-			graficoTarta(titleText, myChart, myDataSource);
-		}
-	}
+	let url = myDataSource + '/' + series.length;
+	fetch(url)
+		.then((r) => r.json())
+		.then((data) => {
+			option = {
+				legend: {
+					data: series,
+				},
+				transition: ['style', 'x', 'y'],
+				tooltip: {
+					trigger: 'axis',
+					axisPointer: {
+						animation: false,
+					},
+				},
+				xAxis: {
+					type: 'time',
+					splitLine: {
+						show: false,
+					},
+				},
+				yAxis: {
+					type: 'value',
+					boundaryGap: [0, '100%'],
+				},
+				series: [],
+			};
+
+			for (let [i, d] of data.entries()) {
+				option['series'].push({
+					name: series[i],
+					type: 'line',
+					showSymbol: false,
+					data: d,
+				});
+			}
+
+			myChart.setOption(option, true);
+
+			timeInterval = setInterval(function () {
+				let currData = [];
+				for (let dataSerie of myChart.getOption().series) {
+					currData.push(dataSerie.data);
+				}
+
+				fetch(url, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify(currData),
+				})
+					.then((r) => r.json())
+					.then((dataAdded) => {
+						for (let [i, d] of dataAdded.entries()) {
+							option['series'][i].data = d;
+						}
+						myChart.setOption(option);
+					});
+			}, 150);
+			window.addEventListener('resize', () => {
+				myChart.resize();
+			});
+		});
 };
