@@ -25,17 +25,6 @@ echarts.use([
 	LegendComponent,
 ]);
 
-export const fakeData = (nseries, nvalues, max, min = 1) => {
-	let dataValue = [];
-	for (let i = 0; i < nseries; i++) {
-		dataValue.push([]);
-		for (let j = 0; j < nvalues; j++) {
-			dataValue[i].push(Math.round(Math.random() * (max - min + 1) + min));
-		}
-	}
-	return dataValue;
-};
-
 let timeInterval;
 
 export const graficoLinea = (div, series, category, myDataSource) => {
@@ -134,66 +123,6 @@ export const graficoTarta = (div, series, myDataSource) => {
 				myChart.resize();
 			});
 			myChart.setOption(option, true);
-		});
-};
-
-export const graficoTiempo = (div, myDataSource) => {
-	let myChart = echarts.init(div, 'dark');
-	clearInterval(timeInterval);
-	timeInterval = null;
-
-	fetch(myDataSource)
-		.then((r) => r.json())
-		.then((data) => {
-			option = {
-				legend: {},
-				transition: ['style', 'x', 'y'],
-				tooltip: {
-					trigger: 'axis',
-					axisPointer: {
-						animation: false,
-					},
-				},
-				xAxis: {
-					type: 'time',
-					splitLine: {
-						show: false,
-					},
-				},
-				yAxis: {
-					type: 'value',
-					boundaryGap: [0, '100%'],
-				},
-				series: [
-					{
-						name: 'Fake Data',
-						type: 'line',
-						showSymbol: false,
-						data: data,
-					},
-				],
-			};
-			myChart.setOption(option, true);
-			timeInterval = setInterval(function () {
-				fetch(myDataSource, {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify(myChart.getOption().series[0].data),
-				})
-					.then((r) => r.json())
-					.then((dataAdded) => {
-						myChart.setOption({
-							series: [
-								{
-									data: dataAdded,
-								},
-							],
-						});
-					});
-			}, 150);
-			window.addEventListener('resize', () => {
-				myChart.resize();
-			});
 		});
 };
 
